@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Краткий курс теории вероятностей</title>
+    <!-- Исправленный путь к Chart.js без лишних пробелов -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14pt;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            font-size: 1.8em;
+        }
+        h3 {
+            color: #3498db;
+            margin-top: 20px;
+            font-size: 1.4em;
+        }
+        section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .formula {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .graph-container {
+            margin: 25px 0;
+            text-align: center;
+            min-height: 400px;
+        }
+        canvas {
+            max-width: 100%;
+            height: 400px; /* Явно задаем высоту */
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .control-panel {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .slider-container {
+            margin: 10px 0;
+        }
+        .distribution-controls {
+            margin-top: 15px;
+            display: none;
+        }
+        .example {
+            background: #e8f4fc;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Краткий курс теории вероятностей</h1>
+        <p>Интерактивное изучение основных концепций с визуализацией</p>
+    </header>
+    
+    <section>
+        <h2>Основные понятия теории вероятностей</h2>
+        <p>Теория вероятностей — раздел математики, изучающий закономерности случайных явлений. Основные понятия:</p>
+        
+        <div class="example">
+            <h3>Случайное событие</h3>
+            <p>Исход опыта, который может произойти или не произойти. Например, выпадение орла при подбрасывании монеты.</p>
+        </div>
+        
+        <div class="example">
+            <h3>Вероятность события</h3>
+            <p>Числовая характеристика возможности наступления события, лежащая в интервале [0, 1]. Вероятность 0 означает невозможное событие, 1 — достоверное.</p>
+        </div>
+        
+        <div class="example">
+            <h3>Случайная величина</h3>
+            <p>Величина, принимающая различные значения в зависимости от случайных факторов. Может быть дискретной (принимает отдельные значения) или непрерывной (принимает значения из некоторого интервала).</p>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Классическая вероятность:</strong> P(A) = m/n, где m — число благоприятных исходов, n — общее число исходов</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Условная вероятность и теорема Байеса</h2>
+        <p>Условная вероятность учитывает информацию о произошедших событиях для оценки вероятности других событий.</p>
+        
+        <div class="formula">
+            <p><strong>Условная вероятность:</strong> P(A|B) = P(A ∩ B) / P(B)</p>
+        </div>
+        
+        <div class="example">
+            <h3>Пример: медицинский тест</h3>
+            <p>Пусть вероятность заболевания в популяции P(D) = 0.01, вероятность положительного теста при болезни P(T|D) = 0.95, вероятность положительного теста при здоровье P(T|¬D) = 0.02. Какова вероятность болезни при положительном тесте?</p>
+            <p>Решение: P(D|T) = [P(T|D)·P(D)] / [P(T|D)·P(D) + P(T|¬D)·P(¬D)] = (0.95·0.01)/(0.95·0.01 + 0.02·0.99) ≈ 0.324</p>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Формула Байеса:</strong> P(A|B) = [P(B|A) · P(A)] / P(B)</p>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Формула полной вероятности:</strong> P(B) = Σ P(A_i) · P(B|A_i)</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Случайные величины и распределения</h2>
+        <p>Случайная величина — это величина, принимающая различные значения в зависимости от случайных факторов. Распределение вероятностей описывает вероятности возможных значений случайной величины.</p>
+        
+        <div class="control-panel">
+            <label for="distribution-select">Выберите распределение:</label>
+            <select id="distribution-select" style="width: 100%; margin: 10px 0; padding: 5px;">
+                <option value="normal">Нормальное распределение</option>
+                <option value="binomial">Биномиальное распределение</option>
+                <option value="poisson">Распределение Пуассона</option>
+                <option value="uniform" selected>Равномерное распределение</option>
+                <option value="exponential">Экспоненциальное распределение</option>
+            </select>
+            
+            <!-- Нормальное распределение -->
+            <div id="normal-controls" class="distribution-controls">
+                <div class="slider-container">
+                    <label>Среднее значение (μ): <span id="mu-value">0</span></label>
+                    <input type="range" id="mu-slider" min="-5" max="5" step="0.1" value="0">
+                </div>
+                <div class="slider-container">
+                    <label>Стандартное отклонение (σ): <span id="sigma-value">1</span></label>
+                    <input type="range" id="sigma-slider" min="0.1" max="3" step="0.1" value="1">
+                </div>
+            </div>
+            
+            <!-- Биномиальное распределение -->
+            <div id="binomial-controls" class="distribution-controls">
+                <div class="slider-container">
+                    <label>Число испытаний (n): <span id="n-value">10</span></label>
+                    <input type="range" id="n-slider" min="1" max="50" step="1" value="10">
+                </div>
+                <div class="slider-container">
+                    <label>Вероятность успеха (p): <span id="p-value">0.5</span></label>
+                    <input type="range" id="p-slider" min="0.01" max="0.99" step="0.01" value="0.5">
+                </div>
+            </div>
+            
+            <!-- Распределение Пуассона -->
+            <div id="poisson-controls" class="distribution-controls">
+                <div class="slider-container">
+                    <label>Параметр λ: <span id="lambda-value">3</span></label>
+                    <input type="range" id="lambda-slider" min="0.1" max="10" step="0.1" value="3">
+                </div>
+            </div>
+            
+            <!-- Равномерное распределение -->
+            <div id="uniform-controls" class="distribution-controls" style="display: block;">
+                <div class="slider-container">
+                    <label>Минимальное значение (a): <span id="a-value">0</span></label>
+                    <input type="range" id="a-slider" min="-5" max="0" step="0.1" value="0">
+                </div>
+                <div class="slider-container">
+                    <label>Максимальное значение (b): <span id="b-value">10</span></label>
+                    <input type="range" id="b-slider" min="0" max="15" step="0.1" value="10">
+                </div>
+            </div>
+            
+            <!-- Экспоненциальное распределение -->
+            <div id="exponential-controls" class="distribution-controls">
+                <div class="slider-container">
+                    <label>Параметр λ: <span id="exp-lambda-value">1</span></label>
+                    <input type="range" id="exp-lambda-slider" min="0.1" max="5" step="0.1" value="1">
+                </div>
+            </div>
+        </div>
+        
+        <div class="graph-container">
+            <canvas id="probabilityChart" width="600" height="400"></canvas>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Нормальное распределение:</strong> f(x) = (1/(σ√(2π))) · e^(-(x-μ)²/(2σ²))</p>
+            <p><strong>Биномиальное распределение:</strong> P(X=k) = C(n,k) · p^k · (1-p)^(n-k)</p>
+            <p><strong>Распределение Пуассона:</strong> P(X=k) = (λ^k · e^(-λ)) / k!</p>
+            <p><strong>Равномерное распределение:</strong> f(x) = 1/(b-a) для a ≤ x ≤ b</p>
+            <p><strong>Экспоненциальное распределение:</strong> f(x) = λ · e^(-λx) для x ≥ 0</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Числовые характеристики случайных величин</h2>
+        <p>Числовые характеристики позволяют описать основные свойства распределений без полного описания всех вероятностей.</p>
+        
+        <div class="formula">
+            <p><strong>Математическое ожидание (среднее значение):</strong><br>
+            E(X) = Σ x_i · p_i (для дискретной величины)<br>
+            E(X) = ∫ x·f(x)dx (для непрерывной величины)</p>
+        </div>
+        
+        <div class="example">
+            <h3>Пример вычисления математического ожидания</h3>
+            <p>Пусть есть случайная величина X с распределением: P(X=1)=0.2, P(X=2)=0.5, P(X=3)=0.3.<br>
+            E(X) = 1·0.2 + 2·0.5 + 3·0.3 = 0.2 + 1.0 + 0.9 = 2.1</p>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Дисперсия:</strong><br>
+            D(X) = E[(X - E(X))²] = E(X²) - [E(X)]²</p>
+        </div>
+        
+        <div class="formula">
+            <p><strong>Стандартное отклонение:</strong><br>
+            σ = √D(X)</p>
+        </div>
+        
+        <div class="example">
+            <h3>Интерпретация дисперсии</h3>
+            <p>Дисперсия измеряет разброс значений случайной величины вокруг математического ожидания. Чем больше дисперсия, тем больше разброс значений.</p>
+            <p>В нормальном распределении 68% значений лежат в пределах ±1σ от математического ожидания, 95% — в пределах ±2σ, 99.7% — в пределах ±3σ.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Предельные теоремы</h2>
+        <p>Предельные теоремы описывают поведение случайных величин при большом числе испытаний.</p>
+        
+        <div class="example">
+            <h3>Закон больших чисел</h3>
+            <p>При увеличении числа независимых испытаний среднее значение случайной величины сходится к математическому ожиданию.</p>
+            <p>Пример: при подбрасывании монеты частота выпадения орла приближается к 0.5 с увеличением числа бросков.</p>
+        </div>
+        
+        <div class="example">
+            <h3>Центральная предельная теорема</h3>
+            <p>Сумма (или среднее) достаточно большого числа независимых случайных величин имеет распределение, близкое к нормальному, независимо от распределения исходных величин.</p>
+            <p>Это объясняет, почему нормальное распределение так часто встречается в природе и социальных науках.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Применение теории вероятностей</h2>
+        <p>Теория вероятностей находит применение во многих областях науки и техники:</p>
+        
+        <ul>
+            <li><strong>Статистика</strong> — анализ данных, проверка гипотез, построение доверительных интервалов</li>
+            <li><strong>Финансы</strong> — оценка рисков, моделирование цен на акции, управление портфелем</li>
+            <li><strong>Машинное обучение</strong> — вероятностные модели, байесовские сети, классификация</li>
+            <li><strong>Медицина</strong> — анализ клинических испытаний, оценка эффективности лекарств, диагностика заболеваний</li>
+            <li><strong>Инженерия</strong> — надежность систем, анализ отказов, оптимизация процессов</li>
+            <li><strong>Физика</strong> — квантовая механика, статистическая физика, термодинамика</li>
+            <li><strong>Искусственный интеллект</strong> — принятие решений в условиях неопределенности, робототехника</li>
+        </ul>
+    </section>
+
+    <div class="footer">
+        <p>Курс теории вероятностей | Интерактивные визуализации | © 2023</p>
+        <p>Используйте ползунки для изменения параметров распределений и наблюдайте за изменениями в реальном времени</p>
+    </div>
+
+    <script>
+        console.log("Скрипт запущен");
+        
+        // Факториал для биномиального и Пуассона
+        function factorial(n) {
+            if (n === 0) return 1;
+            let result = 1;
+            for (let i = 1; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // Генерация данных для нормального распределения
+        function generateNormalData(mu, sigma, numPoints = 100) {
+            const data = [];
+            const xMin = mu - 4 * sigma;
+            const xMax = mu + 4 * sigma;
+            const step = (xMax - xMin) / (numPoints - 1);
+            
+            for (let i = 0; i < numPoints; i++) {
+                const x = xMin + i * step;
+                const value = (1 / (sigma * Math.sqrt(2 * Math.PI))) * 
+                             Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+                data.push(value);
+            }
+            return data;
+        }
+
+        // Генерация данных для биномиального распределения
+        function generateBinomialData(n, p, numPoints = n + 1) {
+            const data = [];
+            for (let k = 0; k <= n; k++) {
+                const comb = factorial(n) / (factorial(k) * factorial(n - k));
+                const prob = comb * Math.pow(p, k) * Math.pow(1 - p, n - k);
+                data.push(prob);
+            }
+            return data;
+        }
+
+        // Генерация данных для распределения Пуассона
+        function generatePoissonData(lambda, maxK = 20) {
+            const data = [];
+            for (let k = 0; k <= maxK; k++) {
+                const prob = (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
+                data.push(prob);
+            }
+            return data;
+        }
+
+        // Генерация данных для равномерного распределения
+        function generateUniformData(a, b, numPoints = 100) {
+            const data = [];
+            const step = (b - a) / (numPoints - 1);
+            
+            for (let i = 0; i < numPoints; i++) {
+                const x = a + i * step;
+                data.push(1 / (b - a));
+            }
+            return data;
+        }
+
+        // Генерация данных для экспоненциального распределения
+        function generateExponentialData(lambda, maxX = 10, numPoints = 100) {
+            const data = [];
+            const step = maxX / (numPoints - 1);
+            
+            for (let i = 0; i < numPoints; i++) {
+                const x = i * step;
+                data.push(lambda * Math.exp(-lambda * x));
+            }
+            return data;
+        }
+
+        // Инициализация графика
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOMContentLoaded сработал");
+            
+            const ctx = document.getElementById('probabilityChart');
+            if (!ctx) {
+                console.error("Элемент с ID 'probabilityChart' не найден");
+                return;
+            }
+            
+            const ctx2d = ctx.getContext('2d');
+            if (!ctx2d) {
+                console.error("Не удалось получить контекст 2D");
+                return;
+            }
+            
+            let chart = new Chart(ctx2d, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 100}, (_, i) => -5 + i * 0.1),
+                    datasets: [{
+                        label: 'Равномерное распределение',
+                        data: generateUniformData(0, 10),
+                        borderColor: '#3498db',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            title: { 
+                                display: true, 
+                                text: 'x' 
+                            } 
+                        },
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: 'Плотность/Вероятность' 
+                            },
+                            min: 0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+            
+            console.log("График инициализирован");
+            
+            // Обновление графика при изменении параметров
+            function updateChart() {
+                console.log("Обновление графика");
+                const distribution = document.getElementById('distribution-select').value;
+                let labels = [];
+                let data = [];
+                let chartType = 'line';
+                
+                // Определяем тип графика и данные в зависимости от распределения
+                if (distribution === 'normal') {
+                    const mu = parseFloat(document.getElementById('mu-slider').value);
+                    const sigma = parseFloat(document.getElementById('sigma-slider').value);
+                    document.getElementById('mu-value').textContent = mu.toFixed(1);
+                    document.getElementById('sigma-value').textContent = sigma.toFixed(1);
+                    
+                    labels = Array.from({length: 100}, (_, i) => {
+                        const xMin = mu - 4 * sigma;
+                        const xMax = mu + 4 * sigma;
+                        return (xMin + i * (xMax - xMin) / 99).toFixed(2);
+                    });
+                    data = generateNormalData(mu, sigma);
+                    
+                } else if (distribution === 'binomial') {
+                    chartType = 'bar';
+                    const n = parseInt(document.getElementById('n-slider').value);
+                    const p = parseFloat(document.getElementById('p-slider').value);
+                    document.getElementById('n-value').textContent = n;
+                    document.getElementById('p-value').textContent = p.toFixed(2);
+                    
+                    labels = Array.from({length: n + 1}, (_, i) => i);
+                    data = generateBinomialData(n, p);
+                    
+                } else if (distribution === 'poisson') {
+                    chartType = 'bar';
+                    const lambda = parseFloat(document.getElementById('lambda-slider').value);
+                    document.getElementById('lambda-value').textContent = lambda.toFixed(1);
+                    
+                    labels = Array.from({length: 21}, (_, i) => i);
+                    data = generatePoissonData(lambda);
+                    
+                } else if (distribution === 'uniform') {
+                    const a = parseFloat(document.getElementById('a-slider').value);
+                    const b = parseFloat(document.getElementById('b-slider').value);
+                    document.getElementById('a-value').textContent = a.toFixed(1);
+                    document.getElementById('b-value').textContent = b.toFixed(1);
+                    
+                    labels = Array.from({length: 100}, (_, i) => (a + i * (b - a) / 99).toFixed(2));
+                    data = generateUniformData(a, b);
+                    
+                } else if (distribution === 'exponential') {
+                    const lambda = parseFloat(document.getElementById('exp-lambda-slider').value);
+                    document.getElementById('exp-lambda-value').textContent = lambda.toFixed(1);
+                    
+                    labels = Array.from({length: 100}, (_, i) => (i * 10 / 99).toFixed(2));
+                    data = generateExponentialData(lambda);
+                }
+                
+                // Обновляем данные графика
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = data;
+                chart.config.type = chartType;
+                
+                // Настройки для бар-чартов
+                if (chartType === 'bar') {
+                    chart.options.scales.x.title.text = 'k (число успехов)';
+                    chart.options.scales.y.title.text = 'Вероятность';
+                    chart.options.plugins.legend.display = true;
+                } else {
+                    chart.options.scales.x.title.text = 'x';
+                    chart.options.scales.y.title.text = 'Плотность';
+                    chart.options.plugins.legend.display = true;
+                }
+                
+                chart.update();
+                console.log("График обновлен");
+            }
+
+            // Обработчики событий для ползунков
+            const sliders = [
+                'mu-slider', 'sigma-slider', 'n-slider', 'p-slider', 
+                'lambda-slider', 'a-slider', 'b-slider', 'exp-lambda-slider'
+            ];
+            
+            sliders.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updateChart);
+                }
+            });
+            
+            // Обработчик для выбора распределения
+            document.getElementById('distribution-select').addEventListener('change', function() {
+                console.log("Смена распределения: " + this.value);
+                // Скрыть все элементы управления
+                document.querySelectorAll('.distribution-controls').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Показать соответствующие элементы управления
+                const selected = this.value;
+                document.getElementById(`${selected}-controls`).style.display = 'block';
+                
+                // Обновить график
+                updateChart();
+            });
+            
+            // Инициализация при загрузке страницы
+            updateChart();
+        });
+    </script>
+</body>
+</html>
